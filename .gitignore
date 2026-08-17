@@ -1,0 +1,7 @@
+# Build output
+/RockPaperScissors
+/src/RockPaperScissors
+
+# Compiler intermediates
+*.o
+*.out
