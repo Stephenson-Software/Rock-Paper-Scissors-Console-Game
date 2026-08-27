@@ -4,8 +4,8 @@ This application allows the user to play Rock Paper Scissors against the compute
 ## Requirements
 
 - `make`
-- A C++ toolchain. The `Makefile` invokes `gcc` and links against `-lstdc++`, so
-  a `gcc` installation that includes the C++ standard library is what is needed.
+- A C++ toolchain. The `Makefile` invokes `g++`, so a GCC installation that
+  includes the C++ compiler driver is what is needed.
 
 ## Building
 
@@ -21,20 +21,25 @@ The compiled program is written to `RockPaperScissors` in the repository root:
 $ make
 ---
 Compiling RockPaperScissors
-gcc src/RockPaperScissors.cpp -lstdc++ -o RockPaperScissors
+g++ src/RockPaperScissors.cpp -o RockPaperScissors
 Finished compiling RockPaperScissors.cpp
 ```
 
-There is no `clean` target; the binary is removed by deleting it directly.
+The build output is removed with `make clean`:
+
+```
+$ make clean
+---
+Removing RockPaperScissors
+rm -f RockPaperScissors
+Finished removing RockPaperScissors
+```
 
 ## Running
 
 ```
 ./RockPaperScissors
 ```
-
-Note that `src/RockPaperScissors` is a separate, checked-in binary that is not
-produced by the build. The program to run is the one in the repository root.
 
 ## How to Play
 
