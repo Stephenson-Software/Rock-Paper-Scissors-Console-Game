@@ -30,9 +30,9 @@ The build output is removed with `make clean`:
 ```
 $ make clean
 ---
-Removing RockPaperScissors
-rm -f RockPaperScissors
-Finished removing RockPaperScissors
+Removing build output
+rm -f RockPaperScissors GameTest
+Finished removing build output
 ```
 
 ## Running
@@ -40,6 +40,33 @@ Finished removing RockPaperScissors
 ```
 ./RockPaperScissors
 ```
+
+## Testing
+
+The game's rules live in `src/Game.h` so that they can be linked into a test
+binary as well as into the game. `make test` compiles and runs that binary:
+
+```
+$ make test
+---
+Compiling GameTest
+g++ src/GameTest.cpp -o GameTest
+Finished compiling GameTest.cpp
+---
+Running GameTest
+./GameTest
+All GameTest assertions passed.
+Finished running GameTest
+```
+
+The assertions live in `src/GameTest.cpp` and use `<cassert>`; no third-party
+test framework is required. A failing assertion aborts the binary, which fails
+the `make test` target with a non-zero exit status.
+
+These are **characterization** tests: they record what the game does today
+rather than what it ought to do. `translateChoice` returns `"scissors"` for
+every integer outside `1` and `2`, and the suite asserts exactly that, so a
+future fix to out-of-range input has to update the assertion deliberately.
 
 ## How to Play
 
