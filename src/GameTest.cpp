@@ -37,39 +37,42 @@ void translateChoice_outOfRangeIsScissors() {
 	assert(translateChoice(-1) == "scissors");
 }
 
-void decideWinner_rockTiesRock() {
+// Named <playerMove>Vs<computerMove>_<outcome>, since several pairs share a
+// rule ("paper beats rock") and differ only in which side played which move.
+
+void decideWinner_rockVsRock_isTie() {
 	assert(decideWinner("rock", "rock") == "tie");
 }
 
-void decideWinner_paperBeatsRock() {
+void decideWinner_rockVsPaper_computerWins() {
 	assert(decideWinner("rock", "paper") == "computer");
 }
 
-void decideWinner_rockBeatsScissors() {
+void decideWinner_rockVsScissors_playerWins() {
 	assert(decideWinner("rock", "scissors") == "player");
 }
 
-void decideWinner_paperBeatsRockForPlayer() {
+void decideWinner_paperVsRock_playerWins() {
 	assert(decideWinner("paper", "rock") == "player");
 }
 
-void decideWinner_paperTiesPaper() {
+void decideWinner_paperVsPaper_isTie() {
 	assert(decideWinner("paper", "paper") == "tie");
 }
 
-void decideWinner_scissorsBeatsPaper() {
+void decideWinner_paperVsScissors_computerWins() {
 	assert(decideWinner("paper", "scissors") == "computer");
 }
 
-void decideWinner_rockBeatsScissorsForComputer() {
+void decideWinner_scissorsVsRock_computerWins() {
 	assert(decideWinner("scissors", "rock") == "computer");
 }
 
-void decideWinner_scissorsBeatsPaperForPlayer() {
+void decideWinner_scissorsVsPaper_playerWins() {
 	assert(decideWinner("scissors", "paper") == "player");
 }
 
-void decideWinner_scissorsTiesScissors() {
+void decideWinner_scissorsVsScissors_isTie() {
 	assert(decideWinner("scissors", "scissors") == "tie");
 }
 
@@ -88,15 +91,15 @@ int main() {
 	translateChoice_threeIsScissors();
 	translateChoice_outOfRangeIsScissors();
 
-	decideWinner_rockTiesRock();
-	decideWinner_paperBeatsRock();
-	decideWinner_rockBeatsScissors();
-	decideWinner_paperBeatsRockForPlayer();
-	decideWinner_paperTiesPaper();
-	decideWinner_scissorsBeatsPaper();
-	decideWinner_rockBeatsScissorsForComputer();
-	decideWinner_scissorsBeatsPaperForPlayer();
-	decideWinner_scissorsTiesScissors();
+	decideWinner_rockVsRock_isTie();
+	decideWinner_rockVsPaper_computerWins();
+	decideWinner_rockVsScissors_playerWins();
+	decideWinner_paperVsRock_playerWins();
+	decideWinner_paperVsPaper_isTie();
+	decideWinner_paperVsScissors_computerWins();
+	decideWinner_scissorsVsRock_computerWins();
+	decideWinner_scissorsVsPaper_playerWins();
+	decideWinner_scissorsVsScissors_isTie();
 
 	getMove_alwaysReturnsAKnownMove();
 
