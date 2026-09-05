@@ -1,6 +1,8 @@
 # Build output
 /RockPaperScissors
+/GameTest
 /src/RockPaperScissors
+/src/GameTest
 
 # Compiler intermediates
 *.o
