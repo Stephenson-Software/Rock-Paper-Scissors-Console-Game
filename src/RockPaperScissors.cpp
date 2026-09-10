@@ -1,12 +1,14 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <ctime>
 
 #include "Game.h"
 
 using namespace std;
 
 int main() {
+	srand(static_cast<unsigned int>(time(NULL)));
 	int pscore = 0;
 	int cscore = 0;
 	int ties = 0;
@@ -22,8 +24,15 @@ int main() {
 			 << "[3] Scissors\n"
 			 << "\n"
 			 << "What will you choose?\n";
-		int choice;
-		cin >> choice;
+		int choice = readChoice(cin);
+		while (choice == CHOICE_INVALID) {
+			cout << "Please enter 1, 2, or 3.\n";
+			choice = readChoice(cin);
+		}
+		if (choice == CHOICE_END_OF_INPUT) {
+			cout << "\nNo more input to read. Goodbye!\n";
+			return 0;
+		}
 		cout << "\n\n";
 		string playerMove = translateChoice(choice);
 		string computerMove = getMove();

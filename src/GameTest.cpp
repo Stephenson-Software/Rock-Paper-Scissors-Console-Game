@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <cassert>
 #include <cstdlib>
 
@@ -35,6 +36,61 @@ void translateChoice_outOfRangeIsScissors() {
 	assert(translateChoice(4) == "scissors");
 	assert(translateChoice(99) == "scissors");
 	assert(translateChoice(-1) == "scissors");
+}
+
+void isValidChoice_acceptsTheThreeMenuNumbers() {
+	assert(isValidChoice(1));
+	assert(isValidChoice(2));
+	assert(isValidChoice(3));
+}
+
+void isValidChoice_rejectsEverythingElse() {
+	assert(!isValidChoice(0));
+	assert(!isValidChoice(4));
+	assert(!isValidChoice(99));
+	assert(!isValidChoice(-1));
+}
+
+void readChoice_returnsTheMenuNumberEntered() {
+	istringstream in("1\n2\n3\n");
+	assert(readChoice(in) == 1);
+	assert(readChoice(in) == 2);
+	assert(readChoice(in) == 3);
+}
+
+void readChoice_rejectsOutOfRangeNumbers() {
+	// Before validation existed these were played as scissors, silently.
+	istringstream in("0\n4\n99\n-1\n");
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+}
+
+void readChoice_rejectsNonNumericInputAndDiscardsIt() {
+	// The second read is what proves the failed extraction was recovered from:
+	// without the clear-and-ignore it would fail forever on the same "abc".
+	istringstream in("abc\n2\n");
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 2);
+}
+
+void readChoice_reportsEndOfInput() {
+	istringstream empty("");
+	assert(readChoice(empty) == CHOICE_END_OF_INPUT);
+
+	istringstream consumed("1\n");
+	assert(readChoice(consumed) == 1);
+	assert(readChoice(consumed) == CHOICE_END_OF_INPUT);
+}
+
+void readChoice_reportsEndOfInputAfterUnparseableTrailingInput() {
+	// "abc" with no newline after it is rejected like any other malformed
+	// entry; discarding it is what exhausts the stream, so the read after it
+	// is the one that reports end of input.
+	istringstream in("abc");
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_END_OF_INPUT);
 }
 
 // Named <playerMove>Vs<computerMove>_<outcome>, since several pairs share a
@@ -90,6 +146,14 @@ int main() {
 	translateChoice_twoIsPaper();
 	translateChoice_threeIsScissors();
 	translateChoice_outOfRangeIsScissors();
+
+	isValidChoice_acceptsTheThreeMenuNumbers();
+	isValidChoice_rejectsEverythingElse();
+	readChoice_returnsTheMenuNumberEntered();
+	readChoice_rejectsOutOfRangeNumbers();
+	readChoice_rejectsNonNumericInputAndDiscardsIt();
+	readChoice_reportsEndOfInput();
+	readChoice_reportsEndOfInputAfterUnparseableTrailingInput();
 
 	decideWinner_rockVsRock_isTie();
 	decideWinner_rockVsPaper_computerWins();

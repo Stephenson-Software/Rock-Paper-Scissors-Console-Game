@@ -63,10 +63,12 @@ The assertions live in `src/GameTest.cpp` and use `<cassert>`; no third-party
 test framework is required. A failing assertion aborts the binary, which fails
 the `make test` target with a non-zero exit status.
 
-These are **characterization** tests: they record what the game does today
-rather than what it ought to do. `translateChoice` returns `"scissors"` for
-every integer outside `1` and `2`, and the suite asserts exactly that, so a
-future fix to out-of-range input has to update the assertion deliberately.
+Some of these are **characterization** tests: they record what the game does
+today rather than what it ought to do. `translateChoice` returns `"scissors"`
+for every integer outside `1` and `2`, and the suite asserts exactly that.
+`translateChoice` is deliberately left total so that no caller can trip
+undefined behavior; out-of-range entries are rejected by `readChoice` before
+they ever reach it.
 
 ## How to Play
 
@@ -104,7 +106,26 @@ The computer won!
 The score is then updated and the next round begins. Rock beats scissors, paper
 beats rock, and scissors beats paper; matching moves are counted as a tie.
 
+The computer's move is drawn from a generator seeded from the clock at startup,
+so the sequence differs from run to run.
+
+Anything other than `1`, `2` or `3` — a number outside that range, or text that
+is not a number at all — is rejected, and the prompt is repeated:
+
+```
+What will you choose?
+abc
+Please enter 1, 2, or 3.
+```
+
 ## Quitting
 
-The game has no quit option and loops until the process is stopped, so Ctrl+C is
-what ends a session.
+The game has no menu quit option and loops until its input runs out. Ctrl+D
+(end of input) ends a session cleanly:
+
+```
+No more input to read. Goodbye!
+```
+
+Ctrl+C also works. Piped input behaves the same way — the game plays each round
+it is given and then exits at the end of the input.
