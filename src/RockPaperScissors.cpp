@@ -14,23 +14,27 @@ int main() {
 	int ties = 0;
 	while (true) {
 		cout << "\n\n\n\n\n\n\n\n\n\n";
-		cout << "Player: " << pscore << "\n" 
-			 << "Computer: " << cscore << "\n"
-			 << "Ties: " << ties << "\n\n";
+		printScoreboard(cout, pscore, cscore, ties);
 		cout << "Rock, Paper, Scissors\n"
 			 << "\n"
 			 << "[1] Rock\n"
 			 << "[2] Paper\n"
 			 << "[3] Scissors\n"
+			 << "[4] Quit\n"
 			 << "\n"
 			 << "What will you choose?\n";
 		int choice = readChoice(cin);
 		while (choice == CHOICE_INVALID) {
-			cout << "Please enter 1, 2, or 3.\n";
+			cout << "Please enter 1, 2, 3, or 4.\n";
 			choice = readChoice(cin);
 		}
-		if (choice == CHOICE_END_OF_INPUT) {
-			cout << "\nNo more input to read. Goodbye!\n";
+		if (choice == CHOICE_QUIT || choice == CHOICE_END_OF_INPUT) {
+			if (choice == CHOICE_END_OF_INPUT) {
+				cout << "\nNo more input to read.\n";
+			}
+			cout << "\nFinal score\n";
+			printScoreboard(cout, pscore, cscore, ties);
+			cout << "Goodbye!\n";
 			return 0;
 		}
 		cout << "\n\n";
