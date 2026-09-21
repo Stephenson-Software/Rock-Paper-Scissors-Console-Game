@@ -84,6 +84,7 @@ Rock, Paper, Scissors
 [1] Rock
 [2] Paper
 [3] Scissors
+[4] Quit
 
 What will you choose?
 ```
@@ -109,23 +110,45 @@ beats rock, and scissors beats paper; matching moves are counted as a tie.
 The computer's move is drawn from a generator seeded from the clock at startup,
 so the sequence differs from run to run.
 
-Anything other than `1`, `2` or `3` — a number outside that range, or text that
-is not a number at all — is rejected, and the prompt is repeated:
+Anything other than `1`, `2`, `3` or `4` — a number outside that range, or
+text that is not a number at all — is rejected, and the prompt is repeated:
 
 ```
 What will you choose?
 abc
-Please enter 1, 2, or 3.
+Please enter 1, 2, 3, or 4.
 ```
 
 ## Quitting
 
-The game has no menu quit option and loops until its input runs out. Ctrl+D
-(end of input) ends a session cleanly:
+Enter `4` at the menu to quit. The final score is printed and the program
+exits with status `0`:
 
 ```
-No more input to read. Goodbye!
+What will you choose?
+4
+
+Final score
+Player: 1
+Computer: 1
+Ties: 1
+
+Goodbye!
 ```
 
-Ctrl+C also works. Piped input behaves the same way — the game plays each round
+Ctrl+D (end of input) ends a session the same way, with a note that the input
+ran out ahead of the final score:
+
+```
+No more input to read.
+
+Final score
+Player: 0
+Computer: 0
+Ties: 1
+
+Goodbye!
+```
+
+Ctrl+C also works. Piped input behaves like Ctrl+D — the game plays each round
 it is given and then exits at the end of the input.

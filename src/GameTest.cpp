@@ -38,15 +38,16 @@ void translateChoice_outOfRangeIsScissors() {
 	assert(translateChoice(-1) == "scissors");
 }
 
-void isValidChoice_acceptsTheThreeMenuNumbers() {
+void isValidChoice_acceptsTheFourMenuNumbers() {
 	assert(isValidChoice(1));
 	assert(isValidChoice(2));
 	assert(isValidChoice(3));
+	assert(isValidChoice(4));
 }
 
 void isValidChoice_rejectsEverythingElse() {
 	assert(!isValidChoice(0));
-	assert(!isValidChoice(4));
+	assert(!isValidChoice(5));
 	assert(!isValidChoice(99));
 	assert(!isValidChoice(-1));
 }
@@ -58,9 +59,17 @@ void readChoice_returnsTheMenuNumberEntered() {
 	assert(readChoice(in) == 3);
 }
 
+void readChoice_returnsQuitForTheQuitEntry() {
+	// 4 is the menu's quit entry, so it must come back as CHOICE_QUIT rather
+	// than being rejected — and CHOICE_QUIT must not collide with a move.
+	istringstream in("4\n");
+	assert(readChoice(in) == CHOICE_QUIT);
+	assert(CHOICE_QUIT != 1 && CHOICE_QUIT != 2 && CHOICE_QUIT != 3);
+}
+
 void readChoice_rejectsOutOfRangeNumbers() {
 	// Before validation existed these were played as scissors, silently.
-	istringstream in("0\n4\n99\n-1\n");
+	istringstream in("0\n5\n99\n-1\n");
 	assert(readChoice(in) == CHOICE_INVALID);
 	assert(readChoice(in) == CHOICE_INVALID);
 	assert(readChoice(in) == CHOICE_INVALID);
@@ -91,6 +100,18 @@ void readChoice_reportsEndOfInputAfterUnparseableTrailingInput() {
 	istringstream in("abc");
 	assert(readChoice(in) == CHOICE_INVALID);
 	assert(readChoice(in) == CHOICE_END_OF_INPUT);
+}
+
+void printScoreboard_printsEachCounterOnItsOwnLine() {
+	ostringstream out;
+	printScoreboard(out, 3, 1, 2);
+	assert(out.str() == "Player: 3\nComputer: 1\nTies: 2\n\n");
+}
+
+void printScoreboard_printsZerosForANewGame() {
+	ostringstream out;
+	printScoreboard(out, 0, 0, 0);
+	assert(out.str() == "Player: 0\nComputer: 0\nTies: 0\n\n");
 }
 
 // Named <playerMove>Vs<computerMove>_<outcome>, since several pairs share a
@@ -147,13 +168,17 @@ int main() {
 	translateChoice_threeIsScissors();
 	translateChoice_outOfRangeIsScissors();
 
-	isValidChoice_acceptsTheThreeMenuNumbers();
+	isValidChoice_acceptsTheFourMenuNumbers();
 	isValidChoice_rejectsEverythingElse();
 	readChoice_returnsTheMenuNumberEntered();
+	readChoice_returnsQuitForTheQuitEntry();
 	readChoice_rejectsOutOfRangeNumbers();
 	readChoice_rejectsNonNumericInputAndDiscardsIt();
 	readChoice_reportsEndOfInput();
 	readChoice_reportsEndOfInputAfterUnparseableTrailingInput();
+
+	printScoreboard_printsEachCounterOnItsOwnLine();
+	printScoreboard_printsZerosForANewGame();
 
 	decideWinner_rockVsRock_isTie();
 	decideWinner_rockVsPaper_computerWins();
