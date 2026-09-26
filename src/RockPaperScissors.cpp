@@ -2,10 +2,19 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
+#include <thread>
 
 #include "Game.h"
 
 using namespace std;
+
+// Holds the screen still for the given number of milliseconds. Output is
+// flushed first so that everything printed so far is visible during the pause.
+void pauseFor(int milliseconds) {
+	cout << flush;
+	this_thread::sleep_for(chrono::milliseconds(milliseconds));
+}
 
 int main() {
 	srand(static_cast<unsigned int>(time(NULL)));
@@ -41,17 +50,17 @@ int main() {
 		string playerMove = translateChoice(choice);
 		string computerMove = getMove();
 
-		// TODO: sleep for 1 second
+		pauseFor(1000);
 
 		for (size_t i = 3; i > 0; i--) {
 			cout << i << "!\n";
-			// TODO: sleep for half a second
+			pauseFor(500);
 		}
 		cout << "\nShoot!\n\n";
 		cout << "Player Move: " << playerMove << "\n";
 		cout << "Computer Move: " << computerMove << "\n";
 		
-		// TODO: sleep for 2 seconds
+		pauseFor(2000);
 
 		string result = decideWinner(playerMove, computerMove);
 		if (result == "player") {
@@ -66,6 +75,6 @@ int main() {
 			cout << "It was a tie!\n";
 			ties++;
 		}
-		// TODO: sleep for 4 seconds
+		pauseFor(4000);
 	}
 }

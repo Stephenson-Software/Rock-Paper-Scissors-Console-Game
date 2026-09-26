@@ -104,6 +104,12 @@ Computer Move: paper
 The computer won!
 ```
 
+The round is paced so that it can be followed: there is a one-second pause
+before the countdown, half a second between each number, two seconds between
+the moves being revealed and the winner being announced, and four seconds on
+the result before the next round's scoreboard is printed. A round therefore
+takes about eight and a half seconds, piped input included.
+
 The score is then updated and the next round begins. Rock beats scissors, paper
 beats rock, and scissors beats paper; matching moves are counted as a tie.
 
