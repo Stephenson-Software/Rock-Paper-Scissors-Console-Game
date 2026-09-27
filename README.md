@@ -116,14 +116,20 @@ beats rock, and scissors beats paper; matching moves are counted as a tie.
 The computer's move is drawn from a generator seeded from the clock at startup,
 so the sequence differs from run to run.
 
-Anything other than `1`, `2`, `3` or `4` — a number outside that range, or
-text that is not a number at all — is rejected, and the prompt is repeated:
+Each line is read as one entry. A line that is anything other than `1`, `2`,
+`3` or `4` (surrounding spaces aside) is rejected, and the prompt is repeated.
+That includes a number outside that range, text that is not a number at all,
+and a number with anything else on the line, such as `1abc`, `2.5` or `1 2`:
 
 ```
 What will you choose?
 abc
 Please enter 1, 2, 3, or 4.
+1abc
+Please enter 1, 2, 3, or 4.
 ```
+
+Blank lines are ignored.
 
 ## Quitting
 

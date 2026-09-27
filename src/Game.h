@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <istream>
 #include <ostream>
-#include <limits>
+#include <sstream>
 
 using namespace std;
 
@@ -25,24 +25,30 @@ inline bool isValidChoice(int i) {
 // Reads one menu selection. Returns 1, 2 or 3 for a move the menu offers,
 // CHOICE_QUIT for the quit entry, CHOICE_INVALID when the entry should be
 // rejected and the prompt repeated, or CHOICE_END_OF_INPUT when the stream has
-// nothing left to read. A malformed entry is discarded up to the end of its
-// line so the next read starts clean, which is what keeps a failed extraction
-// from being retried forever.
+// nothing left to read. Each entry is one whole line, and it is accepted only
+// when the entire line (ignoring surrounding whitespace) is the number, so an
+// entry such as "1abc" or "1 2" is rejected rather than being played with its
+// remainder left over for the next round. Blank lines are skipped.
 inline int readChoice(istream& in) {
-	int choice = 0;
-	in >> choice;
-	if (in.fail()) {
-		if (in.eof()) {
-			return CHOICE_END_OF_INPUT;
+	string line;
+	while (getline(in, line)) {
+		istringstream entry(line);
+		entry >> ws;
+		if (entry.eof()) {
+			continue;
 		}
-		in.clear();
-		in.ignore(numeric_limits<streamsize>::max(), '\n');
-		return CHOICE_INVALID;
+		int choice = 0;
+		entry >> choice;
+		if (entry.fail()) {
+			return CHOICE_INVALID;
+		}
+		entry >> ws;
+		if (!entry.eof() || !isValidChoice(choice)) {
+			return CHOICE_INVALID;
+		}
+		return choice;
 	}
-	if (!isValidChoice(choice)) {
-		return CHOICE_INVALID;
-	}
-	return choice;
+	return CHOICE_END_OF_INPUT;
 }
 
 // Prints the running score in the layout the top of every round uses. The
