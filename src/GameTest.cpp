@@ -77,11 +77,42 @@ void readChoice_rejectsOutOfRangeNumbers() {
 }
 
 void readChoice_rejectsNonNumericInputAndDiscardsIt() {
-	// The second read is what proves the failed extraction was recovered from:
-	// without the clear-and-ignore it would fail forever on the same "abc".
+	// The second read is what proves the rejected entry was discarded: were it
+	// left in the stream, the read would fail forever on the same "abc".
 	istringstream in("abc\n2\n");
 	assert(readChoice(in) == CHOICE_INVALID);
 	assert(readChoice(in) == 2);
+}
+
+void readChoice_rejectsANumberFollowedByOtherCharacters() {
+	// Each entry is rejected once, at its own read, and nothing it contained
+	// carries over: the read after it returns the next line's entry.
+	istringstream in("1abc\n3\n2.5\n3\n1 2\n3\n");
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 3);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 3);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 3);
+	assert(readChoice(in) == CHOICE_END_OF_INPUT);
+}
+
+void readChoice_acceptsANumberWithSurroundingWhitespace() {
+	istringstream in(" 3 \n\t2\t\n");
+	assert(readChoice(in) == 3);
+	assert(readChoice(in) == 2);
+}
+
+void readChoice_skipsBlankLines() {
+	istringstream in("\n   \n\t\n1\n\n");
+	assert(readChoice(in) == 1);
+	assert(readChoice(in) == CHOICE_END_OF_INPUT);
+}
+
+void readChoice_acceptsAFinalEntryWithNoNewline() {
+	istringstream in("2");
+	assert(readChoice(in) == 2);
+	assert(readChoice(in) == CHOICE_END_OF_INPUT);
 }
 
 void readChoice_reportsEndOfInput() {
@@ -174,6 +205,10 @@ int main() {
 	readChoice_returnsQuitForTheQuitEntry();
 	readChoice_rejectsOutOfRangeNumbers();
 	readChoice_rejectsNonNumericInputAndDiscardsIt();
+	readChoice_rejectsANumberFollowedByOtherCharacters();
+	readChoice_acceptsANumberWithSurroundingWhitespace();
+	readChoice_skipsBlankLines();
+	readChoice_acceptsAFinalEntryWithNoNewline();
 	readChoice_reportsEndOfInput();
 	readChoice_reportsEndOfInputAfterUnparseableTrailingInput();
 
