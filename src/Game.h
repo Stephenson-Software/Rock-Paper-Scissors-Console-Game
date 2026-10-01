@@ -28,7 +28,9 @@ inline bool isValidChoice(int i) {
 // nothing left to read. Each entry is one whole line, and it is accepted only
 // when the entire line (ignoring surrounding whitespace) is the number, so an
 // entry such as "1abc" or "1 2" is rejected rather than being played with its
-// remainder left over for the next round. Blank lines are skipped.
+// remainder left over for the next round. The number must be a single digit,
+// so a signed or zero-padded entry such as "+3" or "03" is rejected too.
+// Blank lines are skipped.
 inline int readChoice(istream& in) {
 	string line;
 	while (getline(in, line)) {
@@ -37,13 +39,14 @@ inline int readChoice(istream& in) {
 		if (entry.eof()) {
 			continue;
 		}
-		int choice = 0;
-		entry >> choice;
-		if (entry.fail()) {
+		string token;
+		entry >> token;
+		entry >> ws;
+		if (!entry.eof() || token.size() != 1) {
 			return CHOICE_INVALID;
 		}
-		entry >> ws;
-		if (!entry.eof() || !isValidChoice(choice)) {
+		int choice = token[0] - '0';
+		if (!isValidChoice(choice)) {
 			return CHOICE_INVALID;
 		}
 		return choice;
