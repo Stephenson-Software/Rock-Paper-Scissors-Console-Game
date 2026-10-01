@@ -98,7 +98,8 @@ void readChoice_rejectsANumberFollowedByOtherCharacters() {
 }
 
 void readChoice_rejectsSignedAndZeroPaddedNumbers() {
-	// Integer extraction would accept every one of these as a menu number.
+	// Integer extraction parses each of these as a number, and all but "-0"
+	// land on a menu number; only a single digit is a menu entry.
 	istringstream in("+3\n03\n-0\n+1\n001\n2\n");
 	assert(readChoice(in) == CHOICE_INVALID);
 	assert(readChoice(in) == CHOICE_INVALID);
