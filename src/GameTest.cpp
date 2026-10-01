@@ -97,6 +97,18 @@ void readChoice_rejectsANumberFollowedByOtherCharacters() {
 	assert(readChoice(in) == CHOICE_END_OF_INPUT);
 }
 
+void readChoice_rejectsSignedAndZeroPaddedNumbers() {
+	// Integer extraction parses each of these as a number, and all but "-0"
+	// land on a menu number; only a single digit is a menu entry.
+	istringstream in("+3\n03\n-0\n+1\n001\n2\n");
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 2);
+}
+
 void readChoice_acceptsANumberWithSurroundingWhitespace() {
 	istringstream in(" 3 \n\t2\t\n");
 	assert(readChoice(in) == 3);
@@ -206,6 +218,7 @@ int main() {
 	readChoice_rejectsOutOfRangeNumbers();
 	readChoice_rejectsNonNumericInputAndDiscardsIt();
 	readChoice_rejectsANumberFollowedByOtherCharacters();
+	readChoice_rejectsSignedAndZeroPaddedNumbers();
 	readChoice_acceptsANumberWithSurroundingWhitespace();
 	readChoice_skipsBlankLines();
 	readChoice_acceptsAFinalEntryWithNoNewline();

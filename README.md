@@ -119,7 +119,8 @@ so the sequence differs from run to run.
 Each line is read as one entry. A line that is anything other than `1`, `2`,
 `3` or `4` (surrounding spaces aside) is rejected, and the prompt is repeated.
 That includes a number outside that range, text that is not a number at all,
-and a number with anything else on the line, such as `1abc`, `2.5` or `1 2`:
+a number written with a sign or leading zeros, such as `+3` or `03`, and a
+number with anything else on the line, such as `1abc`, `2.5` or `1 2`:
 
 ```
 What will you choose?
