@@ -9,8 +9,9 @@
 using namespace std;
 
 // Characterization tests. These assert what the game does today, not what it
-// ought to do. translateChoice_outOfRangeIsScissors in particular locks in a
-// known bug so that changing it is a deliberate, visible act.
+// ought to do. translateChoice_outOfRangeIsScissors in particular locks in the
+// fallback for integers outside the menu so that changing it is a deliberate,
+// visible act.
 
 #ifdef NDEBUG
 #error "GameTest must be compiled with assertions enabled (NDEBUG must not be defined)."
@@ -29,9 +30,10 @@ void translateChoice_threeIsScissors() {
 }
 
 void translateChoice_outOfRangeIsScissors() {
-	// Documents current behavior, not desired behavior: every integer outside
-	// 1 and 2 falls through to scissors, including the value cin leaves behind
-	// after a failed extraction.
+	// Every integer outside 1 and 2 falls through to scissors. No caller reaches
+	// that fallback today — readChoice rejects out-of-range entries and getMove
+	// only draws 1 through 3 — but translateChoice stays total so that a future
+	// caller cannot trip undefined behavior.
 	assert(translateChoice(0) == "scissors");
 	assert(translateChoice(4) == "scissors");
 	assert(translateChoice(99) == "scissors");
