@@ -63,6 +63,11 @@ The assertions live in `src/GameTest.cpp` and use `<cassert>`; no third-party
 test framework is required. A failing assertion aborts the binary, which fails
 the `make test` target with a non-zero exit status.
 
+The `Build` workflow in `.github/workflows/build.yml` runs on every pull request
+and every push to `master`. It runs `make` and `make test`, then plays one round
+with piped input (an invalid entry, `1`, then `4`) and fails if the rejection
+message, the round's moves and result, or `Goodbye!` are missing.
+
 Some of these are **characterization** tests: they record what the game does
 today rather than what it ought to do. `translateChoice` returns `"scissors"`
 for every integer outside `1` and `2`, and the suite asserts exactly that.
