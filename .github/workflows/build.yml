@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: make
+
+      - name: Test
+        run: make test
+
+      - name: Smoke run
+        run: |
+          output="$(printf 'abc\n1\n4\n' | timeout 30 ./RockPaperScissors)"
+          echo "$output"
+          grep -qF 'Please enter 1, 2, 3, or 4.' <<< "$output"
+          grep -qF 'Player Move: rock' <<< "$output"
+          grep -qE '^Computer Move: (rock|paper|scissors)$' <<< "$output"
+          test "$(grep -cE '^(You win!|The computer won!|It was a tie!)$' <<< "$output")" -eq 1
+          grep -qF 'Goodbye!' <<< "$output"
