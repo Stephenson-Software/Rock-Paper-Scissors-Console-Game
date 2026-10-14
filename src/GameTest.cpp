@@ -207,6 +207,29 @@ void getMove_alwaysReturnsAKnownMove() {
 	}
 }
 
+void getMove_drawsEveryMove() {
+	// A fixed seed keeps this deterministic. Over 1000 draws each move should
+	// turn up many times; one that never does means the computer can no longer
+	// play it, which getMove_alwaysReturnsAKnownMove alone would not notice.
+	srand(1);
+	bool sawRock = false;
+	bool sawPaper = false;
+	bool sawScissors = false;
+	for (size_t i = 0; i < 1000; i++) {
+		string move = getMove();
+		if (move == "rock") {
+			sawRock = true;
+		} else if (move == "paper") {
+			sawPaper = true;
+		} else if (move == "scissors") {
+			sawScissors = true;
+		}
+	}
+	assert(sawRock);
+	assert(sawPaper);
+	assert(sawScissors);
+}
+
 int main() {
 	translateChoice_oneIsRock();
 	translateChoice_twoIsPaper();
@@ -241,6 +264,7 @@ int main() {
 	decideWinner_scissorsVsScissors_isTie();
 
 	getMove_alwaysReturnsAKnownMove();
+	getMove_drawsEveryMove();
 
 	cout << "All GameTest assertions passed.\n";
 	return 0;
