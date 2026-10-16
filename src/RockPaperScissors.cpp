@@ -63,18 +63,7 @@ int main() {
 		pauseFor(2000);
 
 		string result = decideWinner(playerMove, computerMove);
-		if (result == "player") {
-			cout << "You win!\n";
-			pscore++;
-		}
-		else if (result == "computer") {
-			cout << "The computer won!\n";
-			cscore++;
-		}
-		else {
-			cout << "It was a tie!\n";
-			ties++;
-		}
+		cout << recordResult(result, pscore, cscore, ties) << "\n";
 		pauseFor(4000);
 	}
 }

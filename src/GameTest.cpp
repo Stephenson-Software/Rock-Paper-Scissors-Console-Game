@@ -198,6 +198,43 @@ void decideWinner_scissorsVsScissors_isTie() {
 	assert(decideWinner("scissors", "scissors") == "tie");
 }
 
+// Each counter starts at a different value so that crediting the wrong side
+// cannot go unnoticed.
+
+void recordResult_playerWin_creditsThePlayer() {
+	int pscore = 5;
+	int cscore = 7;
+	int ties = 9;
+	assert(recordResult("player", pscore, cscore, ties) == "You win!");
+	assert(pscore == 6 && cscore == 7 && ties == 9);
+}
+
+void recordResult_computerWin_creditsTheComputer() {
+	int pscore = 5;
+	int cscore = 7;
+	int ties = 9;
+	assert(recordResult("computer", pscore, cscore, ties) == "The computer won!");
+	assert(pscore == 5 && cscore == 8 && ties == 9);
+}
+
+void recordResult_tie_countsATie() {
+	int pscore = 5;
+	int cscore = 7;
+	int ties = 9;
+	assert(recordResult("tie", pscore, cscore, ties) == "It was a tie!");
+	assert(pscore == 5 && cscore == 7 && ties == 10);
+}
+
+void recordResult_unknownResult_countsATie() {
+	// decideWinner only returns "player", "computer" or "tie", but anything
+	// else falls through to the tie branch, as it did when this lived in main.
+	int pscore = 5;
+	int cscore = 7;
+	int ties = 9;
+	assert(recordResult("", pscore, cscore, ties) == "It was a tie!");
+	assert(pscore == 5 && cscore == 7 && ties == 10);
+}
+
 void getMove_alwaysReturnsAKnownMove() {
 	// getMove draws from rand(), so the specific move is not asserted — only
 	// that every draw is one the rest of the game knows how to score.
@@ -262,6 +299,11 @@ int main() {
 	decideWinner_scissorsVsRock_computerWins();
 	decideWinner_scissorsVsPaper_playerWins();
 	decideWinner_scissorsVsScissors_isTie();
+
+	recordResult_playerWin_creditsThePlayer();
+	recordResult_computerWin_creditsTheComputer();
+	recordResult_tie_countsATie();
+	recordResult_unknownResult_countsATie();
 
 	getMove_alwaysReturnsAKnownMove();
 	getMove_drawsEveryMove();

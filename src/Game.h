@@ -101,4 +101,21 @@ inline string decideWinner(string p, string c) {
 	}
 }
 
+// Scores one round from decideWinner's result: adds one to the counter of
+// whichever side won, or to ties, and returns the line that announces it.
+inline string recordResult(string result, int& pscore, int& cscore, int& ties) {
+	if (result == "player") {
+		pscore++;
+		return "You win!";
+	}
+	else if (result == "computer") {
+		cscore++;
+		return "The computer won!";
+	}
+	else {
+		ties++;
+		return "It was a tie!";
+	}
+}
+
 #endif
