@@ -1,6 +1,10 @@
 # Rock Paper Scissors Console Game
 This application allows the user to play Rock Paper Scissors against the computer. 
 
+![Two real rounds of Rock Paper Scissors against the computer](docs/images/rock-paper-scissors.gif)
+
+*Two real rounds against the computer, then Quit. The pauses are shortened in the recording.*
+
 ## Requirements
 
 - `make`
@@ -173,3 +177,7 @@ Goodbye!
 
 Ctrl+C also works. Piped input behaves like Ctrl+D — the game plays each round
 it is given and then exits at the end of the input.
+
+## How the screenshot was captured
+
+`docs/images/rock-paper-scissors.gif` was recorded on 2026-10-18 from a real run of `./RockPaperScissors` built with `make`, with `1`, `3` and `4` typed at the menu. The computer's moves are its own. The program was started in a pseudo-terminal, the input shown was typed into it by a script, and the recorded terminal output was rendered to an image with [pyte](https://github.com/selectel/pyte) and [Pillow](https://python-pillow.org/). Nothing in the output was edited; only the window frame was added. Pauses longer than 1.5 seconds were shortened in the GIF.
