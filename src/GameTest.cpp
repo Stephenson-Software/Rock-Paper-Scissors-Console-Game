@@ -117,6 +117,18 @@ void readChoice_acceptsANumberWithSurroundingWhitespace() {
 	assert(readChoice(in) == 2);
 }
 
+void readChoice_acceptsWindowsLineEndings() {
+	// getline leaves the "\r" of a "\r\n" ending on the line. It counts as
+	// trailing whitespace, so input typed or piped on Windows reads the same,
+	// a "\r"-only line is a blank line, and a malformed entry is still rejected.
+	istringstream in("1\r\n\r\n4\r\n1abc\r\n2\r\n");
+	assert(readChoice(in) == 1);
+	assert(readChoice(in) == CHOICE_QUIT);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 2);
+	assert(readChoice(in) == CHOICE_END_OF_INPUT);
+}
+
 void readChoice_skipsBlankLines() {
 	istringstream in("\n   \n\t\n1\n\n");
 	assert(readChoice(in) == 1);
@@ -196,6 +208,14 @@ void decideWinner_scissorsVsPaper_playerWins() {
 
 void decideWinner_scissorsVsScissors_isTie() {
 	assert(decideWinner("scissors", "scissors") == "tie");
+}
+
+void decideWinner_unrecognizedMove_isTie() {
+	// Only translateChoice's three names are ever passed in, but any pair that
+	// is not one of the six winning pairs falls through to a tie.
+	assert(decideWinner("lizard", "rock") == "tie");
+	assert(decideWinner("rock", "") == "tie");
+	assert(decideWinner("Rock", "scissors") == "tie");
 }
 
 // Each counter starts at a different value so that crediting the wrong side
@@ -282,6 +302,7 @@ int main() {
 	readChoice_rejectsANumberFollowedByOtherCharacters();
 	readChoice_rejectsSignedAndZeroPaddedNumbers();
 	readChoice_acceptsANumberWithSurroundingWhitespace();
+	readChoice_acceptsWindowsLineEndings();
 	readChoice_skipsBlankLines();
 	readChoice_acceptsAFinalEntryWithNoNewline();
 	readChoice_reportsEndOfInput();
@@ -299,6 +320,7 @@ int main() {
 	decideWinner_scissorsVsRock_computerWins();
 	decideWinner_scissorsVsPaper_playerWins();
 	decideWinner_scissorsVsScissors_isTie();
+	decideWinner_unrecognizedMove_isTie();
 
 	recordResult_playerWin_creditsThePlayer();
 	recordResult_computerWin_creditsTheComputer();
