@@ -142,7 +142,8 @@ Please enter 1, 2, 3, or 4.
 Please enter 1, 2, 3, or 4.
 ```
 
-Blank lines are ignored.
+Blank lines are ignored. Lines ending in a Windows-style `\r\n` are read the
+same as lines ending in `\n`.
 
 ## Quitting
 
