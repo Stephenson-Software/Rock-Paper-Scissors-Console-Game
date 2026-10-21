@@ -26,3 +26,14 @@ jobs:
           grep -qE '^Computer Move: (rock|paper|scissors)$' <<< "$output"
           test "$(grep -cE '^(You win!|The computer won!|It was a tie!)$' <<< "$output")" -eq 1
           grep -qF 'Goodbye!' <<< "$output"
+          if grep -qF 'No more input to read.' <<< "$output"; then exit 1; fi
+
+      - name: Smoke run to end of input
+        run: |
+          output="$(printf '1\n' | timeout 30 ./RockPaperScissors)"
+          echo "$output"
+          grep -qF 'Player Move: rock' <<< "$output"
+          test "$(grep -cE '^(You win!|The computer won!|It was a tie!)$' <<< "$output")" -eq 1
+          grep -qF 'No more input to read.' <<< "$output"
+          grep -qF 'Final score' <<< "$output"
+          grep -qF 'Goodbye!' <<< "$output"
