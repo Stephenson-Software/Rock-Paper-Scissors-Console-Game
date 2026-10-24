@@ -80,7 +80,9 @@ The `Build` workflow in `.github/workflows/build.yml` runs on every pull request
 and every push to `master`. It runs `make` and `make test`, then plays one round
 with piped input (an invalid entry, `1`, then `4`) and fails unless the output
 contains the rejection message, both moves, exactly one result line, and
-`Goodbye!`.
+`Goodbye!`, with no end-of-input note. A second run pipes only `1`, so the game
+reaches the end of its input, and fails unless the output contains exactly one
+result line, `No more input to read.`, `Final score` and `Goodbye!`.
 
 ## How to Play
 
