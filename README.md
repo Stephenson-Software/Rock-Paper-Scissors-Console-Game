@@ -41,9 +41,10 @@ Finished removing build output
 
 ### Building from VS Code
 
-`.vscode/tasks.json` defines a default build task, `C/C++: g++ build active
-file`, which compiles only the file open in the editor, with `-g`, and writes
-the binary next to it rather than to the repository root. Building with
+`.vscode/tasks.json` defines a default build task,
+`C/C++: g++ build active file`, which compiles only the file open in the
+editor, with `-g`, and writes the binary next to it rather than to the
+repository root. Building with
 `src/RockPaperScissors.cpp` open produces `src/RockPaperScissors`; building with
 `src/GameTest.cpp` open produces `src/GameTest`. `make clean` does not remove
 these two files, but `.gitignore` excludes them.
