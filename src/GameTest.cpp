@@ -54,6 +54,17 @@ void isValidChoice_rejectsEverythingElse() {
 	assert(!isValidChoice(-1));
 }
 
+void choiceSentinels_areDistinctAndNeverAValidChoice() {
+	// main re-prompts while readChoice returns CHOICE_INVALID and exits on
+	// CHOICE_END_OF_INPUT. Were the two equal, running out of input would
+	// re-prompt forever; were either a valid choice, it would be played or
+	// taken as Quit.
+	assert(CHOICE_INVALID != CHOICE_END_OF_INPUT);
+	assert(!isValidChoice(CHOICE_INVALID));
+	assert(!isValidChoice(CHOICE_END_OF_INPUT));
+	assert(isValidChoice(CHOICE_QUIT));
+}
+
 void readChoice_returnsTheMenuNumberEntered() {
 	istringstream in("1\n2\n3\n");
 	assert(readChoice(in) == 1);
@@ -295,6 +306,7 @@ int main() {
 
 	isValidChoice_acceptsTheFourMenuNumbers();
 	isValidChoice_rejectsEverythingElse();
+	choiceSentinels_areDistinctAndNeverAValidChoice();
 	readChoice_returnsTheMenuNumberEntered();
 	readChoice_returnsQuitForTheQuitEntry();
 	readChoice_rejectsOutOfRangeNumbers();
