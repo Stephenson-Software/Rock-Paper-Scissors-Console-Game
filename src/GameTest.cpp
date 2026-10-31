@@ -122,6 +122,19 @@ void readChoice_rejectsSignedAndZeroPaddedNumbers() {
 	assert(readChoice(in) == 2);
 }
 
+void readChoice_rejectsASingleNonDigitCharacter() {
+	// A one-character entry is converted by subtracting '0', so a character
+	// just below '0' lands on a negative number: "/" on -1, which is
+	// CHOICE_END_OF_INPUT, and "." on -2. Only the range check stops "/" from
+	// ending the game as though the input had run out.
+	istringstream in("/\n.\na\n:\n2\n");
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == CHOICE_INVALID);
+	assert(readChoice(in) == 2);
+}
+
 void readChoice_acceptsANumberWithSurroundingWhitespace() {
 	istringstream in(" 3 \n\t2\t\n");
 	assert(readChoice(in) == 3);
@@ -313,6 +326,7 @@ int main() {
 	readChoice_rejectsNonNumericInputAndDiscardsIt();
 	readChoice_rejectsANumberFollowedByOtherCharacters();
 	readChoice_rejectsSignedAndZeroPaddedNumbers();
+	readChoice_rejectsASingleNonDigitCharacter();
 	readChoice_acceptsANumberWithSurroundingWhitespace();
 	readChoice_acceptsWindowsLineEndings();
 	readChoice_skipsBlankLines();
