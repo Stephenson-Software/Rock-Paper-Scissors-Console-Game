@@ -311,6 +311,31 @@ void getMove_drawsEveryMove() {
 	assert(sawScissors);
 }
 
+void getMove_drawsEachMoveAboutEqually() {
+	// getMove_drawsEveryMove would still pass with a computer that nearly
+	// always plays scissors, since translateChoice turns any number above 3
+	// into scissors. Each move should come up about 1000 times in 3000 draws.
+	// The band is about seven standard deviations either side of that, so it
+	// fails on a lopsided draw and not on an unlucky seed.
+	srand(1);
+	int rock = 0;
+	int paper = 0;
+	int scissors = 0;
+	for (size_t i = 0; i < 3000; i++) {
+		string move = getMove();
+		if (move == "rock") {
+			rock++;
+		} else if (move == "paper") {
+			paper++;
+		} else if (move == "scissors") {
+			scissors++;
+		}
+	}
+	assert(rock > 800 && rock < 1200);
+	assert(paper > 800 && paper < 1200);
+	assert(scissors > 800 && scissors < 1200);
+}
+
 int main() {
 	translateChoice_oneIsRock();
 	translateChoice_twoIsPaper();
@@ -355,6 +380,7 @@ int main() {
 
 	getMove_alwaysReturnsAKnownMove();
 	getMove_drawsEveryMove();
+	getMove_drawsEachMoveAboutEqually();
 
 	cout << "All GameTest assertions passed.\n";
 	return 0;
