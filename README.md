@@ -96,7 +96,10 @@ with piped input (an invalid entry, `1`, then `4`) and fails unless the output
 contains the rejection message, both moves, exactly one result line, and
 `Goodbye!`, with no end-of-input note. A second run pipes only `1`, so the game
 reaches the end of its input, and fails unless the output contains exactly one
-result line, `No more input to read.`, `Final score` and `Goodbye!`.
+result line, `No more input to read.`, `Final score` and `Goodbye!`. A third run
+plays two rounds (`1`, `2`, then `4`) and fails unless the output contains two
+result lines and the counters on the four scoreboards it prints add up to 0, 1,
+2 and 2. The sum is checked because each round's winner is random.
 
 ## How to Play
 

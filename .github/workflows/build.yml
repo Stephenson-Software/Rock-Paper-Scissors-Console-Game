@@ -37,3 +37,12 @@ jobs:
           grep -qF 'No more input to read.' <<< "$output"
           grep -qF 'Final score' <<< "$output"
           grep -qF 'Goodbye!' <<< "$output"
+
+      - name: Smoke run keeps score across rounds
+        run: |
+          output="$(printf '1\n2\n4\n' | timeout 30 ./RockPaperScissors)"
+          echo "$output"
+          test "$(grep -cE '^(You win!|The computer won!|It was a tie!)$' <<< "$output")" -eq 2
+          grep -qF 'Final score' <<< "$output"
+          totals="$(grep -E '^(Player|Computer|Ties): [0-9]+$' <<< "$output" | awk '{ sum += $2 } NR % 3 == 0 { print sum; sum = 0 }' | tr '\n' ' ')"
+          test "$totals" = '0 1 2 2 '
