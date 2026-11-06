@@ -99,7 +99,10 @@ reaches the end of its input, and fails unless the output contains exactly one
 result line, `No more input to read.`, `Final score` and `Goodbye!`. A third run
 plays two rounds (`1`, `2`, then `4`) and fails unless the output contains two
 result lines and the counters on the four scoreboards it prints add up to 0, 1,
-2 and 2. The sum is checked because each round's winner is random.
+2 and 2. It also fails unless each scoreboard's `Player`, `Computer` and `Ties`
+counters match the `You win!`, `The computer won!` and `It was a tie!` lines
+printed before it. Both checks hold whichever side wins, because each round's
+winner is random.
 
 ## How to Play
 

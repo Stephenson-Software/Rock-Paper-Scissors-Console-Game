@@ -46,3 +46,12 @@ jobs:
           grep -qF 'Final score' <<< "$output"
           totals="$(grep -E '^(Player|Computer|Ties): [0-9]+$' <<< "$output" | awk '{ sum += $2 } NR % 3 == 0 { print sum; sum = 0 }' | tr '\n' ' ')"
           test "$totals" = '0 1 2 2 '
+          awk '
+            /^You win!$/ { wins++ }
+            /^The computer won!$/ { losses++ }
+            /^It was a tie!$/ { draws++ }
+            /^Player: / && $2 != wins + 0 { bad = 1 }
+            /^Computer: / && $2 != losses + 0 { bad = 1 }
+            /^Ties: / && $2 != draws + 0 { bad = 1 }
+            END { exit bad }
+          ' <<< "$output"
