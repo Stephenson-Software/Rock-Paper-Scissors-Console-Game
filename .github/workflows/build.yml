@@ -55,3 +55,10 @@ jobs:
             /^Ties: / && $2 != draws + 0 { bad = 1 }
             END { exit bad }
           ' <<< "$output"
+
+      - name: Smoke run holds the round's pauses
+        run: |
+          started="$(date +%s%3N)"
+          printf '1\n' | timeout 30 ./RockPaperScissors
+          finished="$(date +%s%3N)"
+          test "$((finished - started))" -ge 8500

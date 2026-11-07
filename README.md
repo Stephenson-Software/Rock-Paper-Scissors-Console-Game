@@ -102,7 +102,9 @@ result lines and the counters on the four scoreboards it prints add up to 0, 1,
 2 and 2. It also fails unless each scoreboard's `Player`, `Computer` and `Ties`
 counters match the `You win!`, `The computer won!` and `It was a tie!` lines
 printed before it. Both checks hold whichever side wins, because each round's
-winner is random.
+winner is random. A fourth run plays one round and fails unless it takes at
+least 8.5 seconds, the sum of the round's pauses, so removing a pause fails the
+build. It sets no upper limit beyond the 30-second timeout every run has.
 
 ## How to Play
 
